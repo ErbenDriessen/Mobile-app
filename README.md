@@ -113,5 +113,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Erben Driessen - [erben.driessen@student.aventus.nl]
 
-Project Link: [https://github.com/ErbenDriessen/GeoFoto]
-
