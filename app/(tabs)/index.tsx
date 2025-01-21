@@ -23,7 +23,7 @@ export default function App() {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        alert('Permission to access location was denied');
+        alert('Toestemming voor toegang tot locatie is geweigerd');
         return;
       }
     })();
@@ -99,9 +99,9 @@ export default function App() {
       setLocation(null);
       setMonteurName('');
       
-      alert('Melding is opgeslagen op de telefoon.');
+      alert('Het defect is opgeslagen op de telefoon.');
     } catch (error) {
-      alert('Er is een fout opgetreden bij het opslaan van de melding.');
+      alert('Er is een fout opgetreden bij het opslaan van het defect.');
       console.error(error);
     }
   };
