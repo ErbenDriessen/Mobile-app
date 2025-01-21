@@ -72,7 +72,7 @@ GeoFoto/
 └── hooks/
     └── useScreenPadding.ts # Custom hooks
 ```
-
+ 
 ## Technologies Used
 
 - [Expo](https://expo.dev)
@@ -114,3 +114,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 Your Name - [your-email@example.com]
 
 Project Link: [https://github.com/yourusername/GeoFoto]
+
