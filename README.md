@@ -1,50 +1,116 @@
-# Welcome to your Expo app 👋
+# GeoFoto - Defect Registration App 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application built with Expo/React Native for registering and managing defects with photos and geolocation data.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📸 Take photos of defects
+- 📍 Automatic location tracking
+- 📝 Defect categorization
+- 💾 Local storage of defects
+- 📧 Email reporting functionality
+- 🌓 Light/Dark mode support
+- 📱 Responsive design (Portrait/Landscape)
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+- Node.js (LTS version recommended)
+- npm or yarn
+- Expo CLI
+- iOS Simulator or Android Emulator (optional)
+- Expo Go app on your mobile device (optional)
 
-   ```bash
-    npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone [your-repository-url]
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn more
+3. Start the development server:
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Usage
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+The app consists of two main tabs:
 
-## Join the community
+### 1. New Defect Registration
+- Enter monteur (technician) name
+- Select defect category
+- Take a photo
+- Add description
+- Location is automatically captured
+- Save locally or send via email
 
-Join our community of developers creating universal apps.
+### 2. Defect Overview
+- View all registered defects
+- Edit existing defects
+- Delete defects
+- Send defect reports via email
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Project Structure
+
+```
+GeoFoto/
+├── app/
+│   ├── (tabs)/
+│   │   ├── index.tsx       # New defect registration screen
+│   │   └── meldingen.tsx   # Defects overview screen
+│   └── _layout.tsx         # Root layout configuration
+├── components/
+│   ├── MeldingBewerken.tsx # Defect editing component
+│   └── [other components]
+├── types/
+│   └── melding.ts          # Type definitions
+└── hooks/
+    └── useScreenPadding.ts # Custom hooks
+```
+
+## Technologies Used
+
+- [Expo](https://expo.dev)
+- [React Native](https://reactnative.dev)
+- [Expo Router](https://docs.expo.dev/router/introduction)
+- [Expo Location](https://docs.expo.dev/versions/latest/sdk/location)
+- [Expo Image Picker](https://docs.expo.dev/versions/latest/sdk/imagepicker)
+- [Expo Mail Composer](https://docs.expo.dev/versions/latest/sdk/mail-composer)
+- [AsyncStorage](https://react-native-async-storage.github.io/async-storage)
+
+## Development
+
+To start developing:
+
+1. Run the development server:
+```bash
+npx expo start
+```
+
+2. Choose your preferred development environment:
+- Press 'i' for iOS simulator
+- Press 'a' for Android emulator
+- Scan QR code with Expo Go app for physical device testing
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+Your Name - [your-email@example.com]
+
+Project Link: [https://github.com/yourusername/GeoFoto]
