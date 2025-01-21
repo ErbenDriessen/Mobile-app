@@ -111,7 +111,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Your Name - [your-email@example.com]
+Erben Driessen - [erben.driessen@student.aventus.nl]
 
-Project Link: [https://github.com/yourusername/GeoFoto]
+Project Link: [https://github.com/ErbenDriessen/GeoFoto]
 
