@@ -1,114 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Button, ScrollView, Platform, useWindowDimensions } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
-import type { LocationObject } from 'expo-location';
-import * as MailComposer from 'expo-mail-composer';
+import React, { useState } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Image, ScrollView, useWindowDimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Melding } from '@/types/melding';
-import { useScreenPadding } from '@/hooks/useScreenPadding';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as MailComposer from 'expo-mail-composer';
 
-export default function App() {
+interface MeldingBewerkenProps {
+  melding: Melding;
+  onSave: () => void;
+  onCancel: () => void;
+}
+
+export function MeldingBewerken({ melding, onSave, onCancel }: MeldingBewerkenProps) {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
-  const [image, setImage] = useState<string | null>(null);
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState<LocationObject | null>(null);
-  const [category, setCategory] = useState('Grondkabels');
-  const [monteurName, setMonteurName] = useState('');
-  const padding = useScreenPadding();
+  const [description, setDescription] = useState(melding.description);
+  const [location] = useState(melding.location);
+  const [category, setCategory] = useState(melding.category);
+  const [monteurName, setMonteurName] = useState(melding.monteurName);
+  const [image] = useState(melding.image);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permission to access location was denied');
-        return;
-      }
-    })();
-  }, []);
-
-  // Laad opgeslagen meldingen bij het opstarten
-  useEffect(() => {
-    loadSavedMeldingen();
-  }, []);
-
-  const loadSavedMeldingen = async () => {
-    try {
-      const savedMeldingen = await AsyncStorage.getItem('meldingen');
-      if (savedMeldingen) {
-        console.log('Opgeslagen meldingen:', JSON.parse(savedMeldingen));
-      }
-    } catch (error) {
-      console.error('Fout bij laden van meldingen:', error);
-    }
-  };
-
-  const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we hebben toestemming nodig voor het gebruik van de camera!');
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      const location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    }
-  };
-
-  const saveMelding = async () => {
-    if (!image || !description || !location || !monteurName) {
-      alert('Vul alle velden in, neem een foto en wacht op de locatiegegevens voordat u de melding opslaat.');
-      return;
-    }
+  const handleOpslaan = async () => {
+    const bijgewerkteMelding: Melding = {
+      ...melding,
+      description,
+      location,
+      category,
+      monteurName,
+      timestamp: Date.now(),
+    };
 
     try {
-      // Haal bestaande meldingen op
-      const savedMeldingen = await AsyncStorage.getItem('meldingen');
-      const meldingen: Melding[] = savedMeldingen ? JSON.parse(savedMeldingen) : [];
-
-      // Maak nieuwe melding
-      const newMelding: Melding = {
-        id: Date.now().toString(),
-        image,
-        description,
-        location,
-        category,
-        monteurName,
-        timestamp: Date.now(),
-      };
-
-      // Voeg nieuwe melding toe aan array
-      meldingen.push(newMelding);
-
-      // Sla bijgewerkte array op
-      await AsyncStorage.setItem('meldingen', JSON.stringify(meldingen));
-
-      // Reset formulier
-      setImage(null);
-      setDescription('');
-      setLocation(null);
-      setMonteurName('');
+      const opgeslagenMeldingen = await AsyncStorage.getItem('meldingen');
+      let meldingen = opgeslagenMeldingen ? JSON.parse(opgeslagenMeldingen) : [];
       
-      alert('Melding is opgeslagen op de telefoon.');
+      meldingen = meldingen.map((m: Melding) => 
+        m.id === melding.id ? bijgewerkteMelding : m
+      );
+
+      await AsyncStorage.setItem('meldingen', JSON.stringify(meldingen));
+      onSave();
     } catch (error) {
-      alert('Er is een fout opgetreden bij het opslaan van de melding.');
-      console.error(error);
+      console.error('Fout bij het opslaan van de melding:', error);
     }
   };
 
   const sendEmail = async () => {
     if (!image || !description || !location || !monteurName) {
-      alert('Vul alle velden in, maak en foto en wacht op de locatiegegevens, voordat u de melding verstuurt.');
+      alert('Vul alle velden in voordat u de melding verstuurt.');
       return;
     }
 
@@ -134,9 +73,9 @@ export default function App() {
   };
 
   return (
-    <ScrollView style={[styles.container, { padding }]}>
+    <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Nieuw defect opnemen</Text>
+        <Text style={styles.title}>Defect Bewerken</Text>
 
         <View style={[styles.formContainer, isLandscape && styles.landscapeContainer]}>
           <View style={[styles.inputSection, isLandscape && styles.landscapeInputSection]}>
@@ -182,13 +121,13 @@ export default function App() {
 
             <View style={styles.buttonContainer}>
               <View style={styles.buttonSpacing}>
-                <Button title="Maak foto" onPress={takePhoto} />
-              </View>
-              <View style={styles.buttonSpacing}>
-                <Button title="Opslaan" onPress={saveMelding} />
+                <Button title="Opslaan" onPress={handleOpslaan} />
               </View>
               <View style={styles.buttonSpacing}>
                 <Button title="Verstuur per e-mail" onPress={sendEmail} />
+              </View>
+              <View style={styles.buttonSpacing}>
+                <Button title="Annuleren" onPress={onCancel} />
               </View>
             </View>
           </View>
@@ -294,4 +233,4 @@ const styles = StyleSheet.create({
   locationContainer: {
     marginBottom: 10,
   },
-});
+}); 
